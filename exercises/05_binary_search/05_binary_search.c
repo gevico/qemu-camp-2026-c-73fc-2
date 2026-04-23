@@ -16,7 +16,19 @@ int n;
 
 int binary_search(const char *target_name) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    int l = 0, r = n-1, mid;
+    while(l < r) {
+        mid = (l + r) >> 1;
+        int result = strcmp(target_name, students[mid].name);
+        if(result == 0) {
+            return mid;
+        } else if(result < 0) {
+            r = mid;
+        } else {
+            l = mid;
+        }
+    }
+    return -1;
 }
 
 int main(void) {

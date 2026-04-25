@@ -26,7 +26,6 @@ void add_word(WordCount **hash_table, const char *word) {
     // TODO: 在这里添加你的代码
     unsigned int idx = hash(word);
     WordCount *curr = hash_table[idx];
-    // 查找是否已存在
     while (curr) {
         if (strcmp(curr->word, word) == 0) {
             curr->count++;
@@ -34,7 +33,7 @@ void add_word(WordCount **hash_table, const char *word) {
         }
         curr = curr->next;
     }
-    // 不存在则创建新节点（头插法）
+    // 未找到，创建新节点（头插法）
     WordCount *new_node = (WordCount*)malloc(sizeof(WordCount));
     if (!new_node) {
         perror("malloc failed");
@@ -49,29 +48,56 @@ void add_word(WordCount **hash_table, const char *word) {
 
 // 打印单词统计结果
 void print_word_counts(WordCount **hash_table) {
-  printf("Word Count Statistics:\n");
-  printf("======================\n");
-
-    // TODO: 在这里添加你的代码
-     for (size_t i = 0; i < HASH_SIZE; ++i) {
-        WordCount *entry = hash_table[i];
-        while (entry) {
-            printf("%s: %d\n", entry->word, entry->count);
-            entry = entry->next;
+  int total = 0;
+    for (int i = 0; i < HASH_SIZE; i++) {
+        WordCount *p = hash_table[i];
+        while (p) {
+            total++;
+            p = p->next;
         }
     }
+    if (total == 0) return;
+
+    WordCount **arr = (WordCount**)malloc(total * sizeof(WordCount*));
+    if (!arr) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    int idx = 0;
+    for (int i = 0; i < HASH_SIZE; i++) {
+        WordCount *p = hash_table[i];
+        while (p) {
+            arr[idx++] = p;
+            p = p->next;
+        }
+    }
+    // 按单词字典序排序
+    for (int i = 0; i < total - 1; i++) {
+        for (int j = i + 1; j < total; j++) {
+            if (strcmp(arr[i]->word, arr[j]->word) > 0) {
+                WordCount *tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+        }
+    }
+    // 输出，单词左对齐15字符，次数右对齐（保证对齐）
+    for (int i = 0; i < total; i++) {
+        printf("%-20s %d\n", arr[i]->word, arr[i]->count);
+    }
+    free(arr);
 }
 
 // 释放哈希表内存
 void free_hash_table(WordCount **hash_table) {
     // TODO: 在这里添加你的代码
     if (!hash_table) return;
-    for (size_t i = 0; i < HASH_SIZE; ++i) {
-        WordCount *entry = hash_table[i];
-        while (entry) {
-            WordCount *next = entry->next;
-            free(entry);
-            entry = next;
+    for (int i = 0; i < HASH_SIZE; i++) {
+        WordCount *p = hash_table[i];
+        while (p) {
+            WordCount *next = p->next;
+            free(p);
+            p = next;
         }
     }
     free(hash_table);

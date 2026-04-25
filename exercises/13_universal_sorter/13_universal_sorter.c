@@ -41,7 +41,55 @@ void processFile(const char *filename) {
 
     switch (choice) {
         // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        case 1: {
+            int *arr = malloc(n * sizeof(int));
+            if (!arr) return;
+            for (int i = 0; i < n; i++) {
+                fscanf(fin, "%d", &arr[i]);
+            }
+            sort(arr, n, sizeof(int), compareInt);
+            for (int i = 0; i < n; i++) {
+                printf("%d ", arr[i]);
+            }
+            printf("\n");
+            free(arr);
+            break;
+        }
+        case 2: {
+            float *arr = malloc(n * sizeof(float));
+            if (!arr) return;
+            for (int i = 0; i < n; i++) {
+                fscanf(fin, "%f", &arr[i]);
+            }
+            sort(arr, n, sizeof(float), compareFloat);
+            for (int i = 0; i < n; i++) {
+                printf("%.2f ", arr[i]);
+            }
+            printf("\n");
+            free(arr);
+            break;
+        }
+        case 3: {
+            char **arr = malloc(n * sizeof(char*));
+            if (!arr) return;
+            char buffer[100];
+            for (int i = 0; i < n; i++) {
+                fscanf(fin, "%s", buffer);
+                arr[i] = malloc(strlen(buffer) + 1);
+                strcpy(arr[i], buffer);
+            }
+            sort(arr, n, sizeof(char*), compareString);
+            for (int i = 0; i < n; i++) {
+                printf("%s ", arr[i]);
+                free(arr[i]);
+            }
+            printf("\n");
+            free(arr);
+            break;
+        }
+        default:
+            printf("未知数据类型 choice = %d\n", choice);
+            break;
     }
 
     fclose(fin);

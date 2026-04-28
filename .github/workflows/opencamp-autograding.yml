@@ -174,7 +174,7 @@ jobs:
             --arg channel "github" \
             --argjson courseId "$OPENCAMP_COURSE_ID" \
             --arg ext "{}" \
-            --arg name "$GITHUB_USER" \
+            --arg name "73fc" \
             --argjson score "$TOTAL_SCORE" \
             --argjson totalScore "$MAX_SCORE" \
             '{channel: $channel, courseId: $courseId, ext: $ext, name: $name, score: $score, totalScore: $totalScore}' > "$SUMMARY"

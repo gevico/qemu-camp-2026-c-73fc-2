@@ -28,7 +28,7 @@ void trim(char *str) {
 
 char** parse_command(char *line, int *argc) {
     *argc = 0;
-    char **argv = malloc(MAX_ARGS * sizeof(char*));
+    char **argv = (char **)malloc(MAX_ARGS * sizeof(char*));
     if (!argv) return NULL;
 
     int len = strlen(line);
@@ -62,7 +62,7 @@ char** parse_command(char *line, int *argc) {
         }
 
         int arg_len = i - start;
-        char *arg = malloc(arg_len + 1);
+        char *arg = (char *)malloc(arg_len + 1);
         strncpy(arg, line + start, arg_len);
         arg[arg_len] = '\0';
         

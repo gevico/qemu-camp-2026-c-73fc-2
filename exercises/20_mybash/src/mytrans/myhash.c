@@ -12,7 +12,7 @@ unsigned long hash_function(const char *str) {
 }
 
 HashTable *create_hash_table() {
-  HashTable *table = malloc(sizeof(HashTable));
+  HashTable *table = (HashTable *)malloc(sizeof(HashTable));
   if (!table)
     return NULL;
   for (int i = 0; i < HASH_TABLE_SIZE; i++) {
@@ -49,12 +49,14 @@ int hash_table_insert(HashTable *table, const char *key, const char *value) {
 
   unsigned long hash = hash_function(key) % HASH_TABLE_SIZE;
   
-  HashNode *new_node = malloc(sizeof(HashNode));
+  HashNode *new_node = (HashNode *)malloc(sizeof(HashNode));
   if (!new_node)
     return 0;
   
-  new_node->key = strdup(key);
-  new_node->value = strdup(value);
+  new_node->key = (char *)malloc(strlen(key) + 1);
+  strcpy(new_node->key, key);
+  new_node->value = (char *)malloc(strlen(value) + 1);
+  strcpy(new_node->value, value);
   new_node->next = table->buckets[hash];
   table->buckets[hash] = new_node;
 

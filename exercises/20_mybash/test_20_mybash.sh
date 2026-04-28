@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./bin/mybash test.sh
+make && ./bin/mybash test.sh

@@ -128,8 +128,6 @@ int main(int argc, char *argv[]) {
     HashTable *ht = create_hash_table(TABLE_SIZE);
     char buffer[4096];
     
-    printf("正在读取文件: %s\n", file_path);
-    
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
         const char *ptr = buffer;
         char *word;
@@ -148,9 +146,6 @@ int main(int argc, char *argv[]) {
     
     qsort(nodes, node_count, sizeof(HashNode *), compare_nodes);
     
-    printf("\n单词统计结果（按频率降序排列）:\n");
-    printf("%-20s %s\n", "单词", "出现次数");
-    printf("-------------------- ----------\n");
     for (int i = 0; i < node_count; i++) {
         printf("%s:%d\n", nodes[i]->word, nodes[i]->count);
     }

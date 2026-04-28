@@ -38,21 +38,19 @@ char** parse_command(char *line, int *argc) {
         if (i >= len) break;
 
         int start = i;
-        int in_quote = 0;
+        int was_in_quote = 0;
         char quote_char = '\0';
 
         if (line[i] == '"' || line[i] == '\'') {
             quote_char = line[i];
-            in_quote = 1;
+            was_in_quote = 1;
             i++;
             start = i;
         }
 
         while (i < len) {
-            if (in_quote) {
+            if (was_in_quote) {
                 if (line[i] == quote_char) {
-                    in_quote = 0;
-                    i++;
                     break;
                 }
             } else {
@@ -63,11 +61,15 @@ char** parse_command(char *line, int *argc) {
             i++;
         }
 
-        int arg_len = in_quote ? (i - start) : (i - start);
-        if (in_quote) arg_len--;
+        int arg_len = i - start;
         char *arg = malloc(arg_len + 1);
         strncpy(arg, line + start, arg_len);
         arg[arg_len] = '\0';
+        
+        if (was_in_quote) {
+            i++;
+        }
+        
         argv[(*argc)++] = arg;
     }
     argv[*argc] = NULL;

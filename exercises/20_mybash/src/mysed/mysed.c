@@ -75,7 +75,7 @@ int mysed_main(int argc, char* argv[]) {
     }
 
     replace_first_occurrence(line, old_str, new_str);
-    fputs(line, stdout);
+    printf("%s", line);
 
     free(old_str);
     free(new_str);

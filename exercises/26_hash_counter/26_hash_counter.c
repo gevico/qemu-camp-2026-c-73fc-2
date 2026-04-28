@@ -28,8 +28,8 @@ unsigned long djb2_hash(const char *str) {
 }
 
 HashTable *create_hash_table(int size) {
-    HashTable *ht = malloc(sizeof(HashTable));
-    ht->table = calloc(size, sizeof(HashNode *));
+    HashTable *ht = (HashTable *)malloc(sizeof(HashTable));
+    ht->table = (HashNode **)calloc(size, sizeof(HashNode *));
     ht->size = size;
     return ht;
 }
@@ -46,8 +46,9 @@ void hash_table_insert(HashTable *ht, const char *word) {
         current = current->next;
     }
     
-    HashNode *new_node = malloc(sizeof(HashNode));
-    new_node->word = strdup(word);
+    HashNode *new_node = (HashNode *)malloc(sizeof(HashNode));
+    new_node->word = (char *)malloc(strlen(word) + 1);
+    strcpy(new_node->word, word);
     new_node->count = 1;
     new_node->next = ht->table[hash];
     ht->table[hash] = new_node;
@@ -91,7 +92,7 @@ void free_hash_table(HashTable *ht) {
 }
 
 char *get_next_word(const char **text) {
-    while (**text != '\0' && !isalpha(**text)) {
+    while (**text != '\0' && !isalpha((unsigned char)**text)) {
         (*text)++;
     }
     
@@ -100,37 +101,25 @@ char *get_next_word(const char **text) {
     }
     
     const char *start = *text;
-    while (**text != '\0' && isalpha(**text)) {
+    while (**text != '\0' && isalpha((unsigned char)**text)) {
         (*text)++;
     }
     
     int length = *text - start;
-    char *word = malloc(length + 1);
+    char *word = (char *)malloc(length + 1);
     strncpy(word, start, length);
     word[length] = '\0';
     
     for (int i = 0; word[i] != '\0'; i++) {
-        word[i] = tolower(word[i]);
+        word[i] = (char)tolower((unsigned char)word[i]);
     }
     
     return word;
 }
 
-int main(int argc, char *argv[]) {
-    const char* file_path = "paper.txt";
-    
-    FILE *file = fopen(file_path, "r");
+int main(void) {
+    FILE *file = fopen("paper.txt", "r");
     if (file == NULL) {
-        file_path = "../exercises/26_hash_counter/paper.txt";
-        file = fopen(file_path, "r");
-    }
-    if (file == NULL) {
-        file_path = "exercises/26_hash_counter/paper.txt";
-        file = fopen(file_path, "r");
-    }
-    
-    if (file == NULL) {
-        perror("无法打开文件");
         return 1;
     }
 
@@ -149,7 +138,7 @@ int main(int argc, char *argv[]) {
     
     fclose(file);
     
-    HashNode **nodes = malloc(TABLE_SIZE * sizeof(HashNode *));
+    HashNode **nodes = (HashNode **)malloc(TABLE_SIZE * sizeof(HashNode *));
     int node_count = 0;
     get_all_words(ht, nodes, &node_count);
     

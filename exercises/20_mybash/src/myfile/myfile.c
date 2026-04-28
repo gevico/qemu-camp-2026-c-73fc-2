@@ -57,19 +57,26 @@ int myfile_main(int argc, char* argv[]) {
     return 1;
   }
 
-  uint16_t e_type;
+  uint16_t e_type = 0;
+  unsigned char bytes[2];
   if (e_ident[4] == 2) {
     fseek(file, 52, SEEK_SET);
-    if (fread(&e_type, 2, 1, file) != 1) {
+    if (fread(bytes, 1, 2, file) != 2) {
       fclose(file);
       return 1;
     }
   } else {
     fseek(file, 36, SEEK_SET);
-    if (fread(&e_type, 2, 1, file) != 1) {
+    if (fread(bytes, 1, 2, file) != 2) {
       fclose(file);
       return 1;
     }
+  }
+
+  if (e_ident[5] == 1) {
+    e_type = (uint16_t)bytes[0] | ((uint16_t)bytes[1] << 8);
+  } else {
+    e_type = ((uint16_t)bytes[0] << 8) | (uint16_t)bytes[1];
   }
 
   fclose(file);

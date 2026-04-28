@@ -2,4 +2,4 @@
 
 EXERCISE_DIR="exercises/20_mybash"
 
-cd "$EXERCISE_DIR" && ./bin/mybash test.sh
+cd "$EXERCISE_DIR" && make && ./bin/mybash test.sh

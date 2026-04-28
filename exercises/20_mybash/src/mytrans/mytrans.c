@@ -99,6 +99,19 @@ int mytrans_main(int argc, char* argv[]) {
   }
   strcat(dict_path, "dict.txt");
   
+  FILE* dict_file = fopen(dict_path, "r");
+  if (!dict_file) {
+      snprintf(dict_path, sizeof(dict_path), "src/mytrans/dict.txt");
+      dict_file = fopen(dict_path, "r");
+  }
+  if (!dict_file) {
+      snprintf(dict_path, sizeof(dict_path), "../exercises/20_mybash/src/mytrans/dict.txt");
+      dict_file = fopen(dict_path, "r");
+  }
+  if (dict_file) {
+      fclose(dict_file);
+  }
+  
   if (load_dictionary(dict_path, table, &dict_count) != 0) {
     fprintf(stderr, "加载词典失败，请确保 dict.txt 存在。\n");
     free_hash_table(table);

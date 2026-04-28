@@ -43,7 +43,24 @@ int main() {
 
     // 使用 strtok 按空格分割单词
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    char *token = strtok(line, " ");
+    while (token != NULL) {
+        // 复制单词，因为 to_lowercase 会修改原字符串
+        char word[256];
+        strncpy(word, token, sizeof(word) - 1);
+        word[sizeof(word) - 1] = '\0';
+        to_lowercase(word);
+
+        // 查找翻译
+        const char *translation = lookup_word(table, word);
+        if (translation != NULL) {
+            printf("%s -> %s\n", token, translation);
+        } else {
+            printf("%s -> (未找到)\n", token);
+        }
+
+        token = strtok(NULL, " ");
+    }
   }
 
   free_hash_table(table);

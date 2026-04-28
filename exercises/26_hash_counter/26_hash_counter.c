@@ -118,8 +118,17 @@ char *get_next_word(const char **text) {
 
 int main(int argc, char *argv[]) {
     const char* file_path = "paper.txt";
-
+    
     FILE *file = fopen(file_path, "r");
+    if (file == NULL) {
+        file_path = "../exercises/26_hash_counter/paper.txt";
+        file = fopen(file_path, "r");
+    }
+    if (file == NULL) {
+        file_path = "exercises/26_hash_counter/paper.txt";
+        file = fopen(file_path, "r");
+    }
+    
     if (file == NULL) {
         perror("无法打开文件");
         return 1;

@@ -6,7 +6,7 @@ LDFLAGS =
 LDLIBS =
 
 TARGET = 21_singly_linked_list_josephus
-SRC = 21_singly_linked_list_josephus.c singly_linked_list.c
+SRC = 21_singly_linked_list_josephus.c
 OBJ = $(SRC:.c=.o)
 DEP = $(OBJ:.o=.d)
 

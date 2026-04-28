@@ -1,16 +1,9 @@
-#ifndef __MYFILE_H__
-#define __MYFILE_H__
+#ifndef MYFILE_H
+#define MYFILE_H
 
-#include "common.h"
-
-#include <elf.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
+#include <stdint.h>
 
 void print_elf_type(uint16_t e_type);
+int myfile_main(int argc, char* argv[]);
 
-#endif //! __MYFILE_H__
+#endif

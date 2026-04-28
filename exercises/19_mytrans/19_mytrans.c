@@ -24,7 +24,7 @@ int main() {
     free_hash_table(table);
     return 1;
   }
-  printf("词典加载完成，共计%ld词条。\n", dict_count);
+  printf("词典加载完成，共计%llu词条。\n", dict_count);
 
   FILE* file = fopen("text.txt", "r");
   if (file == NULL) {
@@ -51,12 +51,11 @@ int main() {
         word[sizeof(word) - 1] = '\0';
         to_lowercase(word);
 
-        // 查找翻译
-        const char *translation = lookup_word(table, word);
+        const char *translation = hash_table_lookup(table, word);
         if (translation != NULL) {
-            printf("%s -> %s\n", token, translation);
+            printf("原文: %s\t翻译: %s\n", token, translation);
         } else {
-            printf("%s -> (未找到)\n", token);
+            printf("原文: %s\t未找到该单词的翻译。\n", token);
         }
 
         token = strtok(NULL, " ");

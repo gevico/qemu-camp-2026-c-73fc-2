@@ -1,36 +1,35 @@
-# =============================================
-# 主 Makefile
-# 功能：
-#   - mybash：生成二进制，放到 bin/
-#   - 其他模块（mysed, myfile, mywc, mytrans）：生成静态库 .a，放到 obj/xxx/，.o 放到 obj/xxx/（或 out/，但建议统一）
-#   - 所有子模块 Makefile 应支持 OBJDIR 和 BINDIR 参数
-# =============================================
-
 PWD := $(shell pwd)
 
-# 所有子模块目录（静态库：生成 .a）
-SUBDIRS := \
-	mysed \
-	myfile \
-	mywc \
-	mytrans
+CC = gcc
+CFLAGS = -Wall -g -O2
 
-# 默认目标：构建 mybash（依赖其他库）
-all: mybash
+SUBDIRS := mysed myfile mywc mytrans
 
-# 通用规则：构建每个子模块（静态库）
-$(SUBDIRS):
-    # TODO: 在这里添加你的代码
-    # I AM NOT DONE
+SRCS = src/mybash/main.c \
+       src/mysed/mysed.c \
+       src/myfile/myfile.c \
+       src/mywc/mywc.c \
+       src/mytrans/myhash.c \
+       src/mytrans/mytrans.c
 
-# 构建 mybash（可执行文件，依赖上面的库）
-mybash: $(SUBDIRS)
-	# TODO: 在这里添加你的代码
-    # I AM NOT DONE
+OBJS := $(SRCS:.c=.o)
 
-# 清理所有生成的文件
+BINDIR = bin
+OBJDIR = obj
+
+all: $(BINDIR)/mybash
+
+$(BINDIR)/mybash: $(OBJS) | $(BINDIR)
+	$(CC) $(CFLAGS) -o $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
+
 clean:
-    # TODO: 在这里添加你的代码
-    # I AM NOT DONE
+	rm -f $(OBJS)
+	rm -f $(BINDIR)/mybash
 
-.PHONY: all $(SUBDIRS) mybash clean
+.PHONY: all clean
